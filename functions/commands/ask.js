@@ -32,12 +32,17 @@ module.exports = (user, channel, text = '', command = {}, botToken = null, callb
     }
 
     var link = res.links[0];
-    let googleAnswer;
-    if(link && link.description) {
-      googleAnswer = link.description;
-      googleAnswer = googleAnswer.split('... ')[1];
-    } else {
-      googleAnswer = unknownText;
+    let googleAnswer = unknownText;
+
+    if(link) {
+      if(link.description) {
+        googleAnswer = link.description;
+        if(googleAnswer.includes('... ')) {
+          googleAnswer = googleAnswer.split('... ')[1];
+        }
+      } else if (link.title) {
+        googleAnswer = link.title;
+      }
     }
 
     callback(null, {
