@@ -1,8 +1,11 @@
+let google = require('google');
 const lib = require('lib')({token: process.env.STDLIB_TOKEN});
+
+google.resultsPerPage = 1;
 /**
-* /hello
+* /ask
 *
-*   Basic "Hello World" command.
+*   Basic /ask command.
 *   All Commands use this template, simply create additional files with
 *   different names to add commands.
 *
@@ -16,11 +19,30 @@ const lib = require('lib')({token: process.env.STDLIB_TOKEN});
 * @returns {object}
 */
 module.exports = (user, channel, text = '', command = {}, botToken = null, callback) => {
-  callback(null, {
-    text: `Hello, <@${user}>...\nYou said: ${text}`,
-    attachments: [
-      // You can customize your messages with attachments.
-      // See https://api.slack.com/docs/message-attachments for more info.
-    ]
+
+  const unknownText = 'I dunno bro. Ask Dave :dave-mary-tongue:';
+
+  google(text, (err, res) => {
+    if (err) {
+      console.error(err);
+      callback(null, {
+        text: unknownText,
+        attachments: []
+      });
+    }
+
+    var link = res.links[0];
+    let googleAnswer;
+    if(link && link.description) {
+      googleAnswer = link.description;
+      googleAnswer = googleAnswer.split('... ')[1];
+    } else {
+      googleAnswer = unknownText;
+    }
+
+    callback(null, {
+      text: googleAnswer,
+      attachments: []
+    });
   });
 };
