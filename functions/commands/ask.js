@@ -20,13 +20,14 @@ google.resultsPerPage = 1;
 */
 module.exports = (user, channel, text = '', command = {}, botToken = null, callback) => {
 
+  const askedFor = `:mag: Asking Google: \'${text}\'...`;
   const unknownText = 'I dunno bro. Ask Dave :dave-mary-tongue:';
 
   google(text, (err, res) => {
     if (err) {
       console.error(err);
       callback(null, {
-        text: unknownText,
+        text: askedFor + '\n' + unknownText,
         attachments: []
       });
     }
@@ -46,7 +47,7 @@ module.exports = (user, channel, text = '', command = {}, botToken = null, callb
     }
 
     callback(null, {
-      text: googleAnswer,
+      text: askedFor + '\n' + googleAnswer,
       attachments: []
     });
   });
