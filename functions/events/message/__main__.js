@@ -20,7 +20,7 @@ module.exports = (user, channel, text = '', event = {}, botToken = null, callbac
   // Only send a response to certain messages
   if (text.match(/genius|bot|genius-bot/i)) {
     callback(null, {
-      text: `:j-bow: Better watch yourself @${user}...`,
+      text: `:j-bow: You called..?`,
       attachments: []
     });
   } else {
